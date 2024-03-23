@@ -1,7 +1,10 @@
-import { Schema, model } from 'mongoose'
+import { Document, Schema, model } from 'mongoose'
 import { Collections } from '../enums/collections.enum'
+import { User } from '../interfaces/user.interface';
 
-const user = new Schema({
+export type UserDocument = User & Document;
+
+const UserSchema = new Schema({
     username: {
         type: String,
         required: [true, 'username']
@@ -19,6 +22,10 @@ const user = new Schema({
         required: [true, 'email']
     },
     refreshToken: String,
+    canLogin: {
+        type: Boolean,
+        required: [true, 'canLogin']
+    },
     photo: String,
     active: {
         type: Boolean,
@@ -26,6 +33,6 @@ const user = new Schema({
     }
 }, {
     timestamps: true,
-})
+});
 
-export default model(Collections.USERS_SCHEMA, user);
+export default model<UserDocument>(Collections.USERS_SCHEMA, UserSchema);

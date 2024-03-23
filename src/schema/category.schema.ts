@@ -1,7 +1,10 @@
-import { Schema, model } from 'mongoose'
+import { Document, Schema, model } from 'mongoose'
 import { Collections } from '../enums/collections.enum'
+import { Category } from '../interfaces/category.interface';
 
-const category = new Schema({
+export type CategoryDocument = Category & Document;
+
+const Category = new Schema({
     name: {
         type: String,
         required: [true, 'name']
@@ -9,9 +12,13 @@ const category = new Schema({
     color: {
         type: String,
         required: [true, 'color']
+    },
+    user: {
+        type: String,
+        required: [true, 'user']
     }
 }, {
     timestamps: true,
 })
 
-export default model(Collections.CATEGORIES_SCHEMA, category);
+export default model<CategoryDocument>(Collections.CATEGORIES_SCHEMA, Category);

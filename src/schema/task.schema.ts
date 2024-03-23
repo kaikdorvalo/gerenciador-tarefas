@@ -1,7 +1,10 @@
-import { Schema, model } from 'mongoose'
+import { Document, Schema, model } from 'mongoose'
 import { Collections } from '../enums/collections.enum'
+import { Task } from '../interfaces/task.interface';
 
-const task = new Schema({
+export type TaskDocument = Task & Document;
+
+const Task = new Schema({
     title: {
         type: String,
         required: [true, 'title']
@@ -38,4 +41,4 @@ const task = new Schema({
     timestamps: true,
 })
 
-export default model(Collections.TASK_SCHEMA, task);
+export default model<TaskDocument>(Collections.TASK_SCHEMA, Task);
