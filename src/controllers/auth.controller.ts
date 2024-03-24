@@ -7,6 +7,10 @@ class AuthController {
         const result = await authService.signIn(req.body, res);
         return res.status(result.statusCode).send(result.metaData);
     }
+
+    async renewToken(req: Request, res: Response) {
+        return await authService.renewToken(req, res);
+    }
 }
 
 export default new AuthController();

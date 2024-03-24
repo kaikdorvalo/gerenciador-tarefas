@@ -37,16 +37,14 @@ export class Jwt {
         return refreshToken;
     }
 
-    public verify(token: string): string | null {
-        let user: string | null = null;
-        jwt.verify(
+    public verify(token: string, secret: string, callback: (err: any, decode: any) => any): any {
+        return jwt.verify(
             token,
-            process.env.JWT_SECRET!,
-            (err: any, decode: any) => {
-                let user = decode._id;
+            secret,
+            (err, decode) => {
+                callback(err, decode);
             }
         )
-        return user;
     }
 
 }

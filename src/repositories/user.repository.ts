@@ -13,11 +13,20 @@ export class UserRepository extends GenericRepository<UserDocument> {
     }
 
     async setRefreshTokenByUserId(_id: string, token: string): Promise<boolean> {
-        const result = await this.updateOne({ _id: _id }, { refreshToken: token })
-        if (result.modifiedCount != 0) {
-            return true
-        }
-        return false
+        return this.updateOne({ _id: _id }, { refreshToken: token })
+            .then((result) => {
+                if (result.modifiedCount != 0) {
+                    return true
+                }
+                return false;
+            })
+            .catch(() => {
+                return false
+            })
+    }
+
+    async getUserByRefreshToken(refreshToken: string): Promise<User | null> {
+        return await this.findOne({ refreshToken: refreshToken });
     }
 
 }

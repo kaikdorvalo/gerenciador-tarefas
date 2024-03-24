@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { UserSignInDto } from "../dtos/user/user-signin";
 import { Errors } from "../enums/errors.enum";
 import { HttpStatus } from "../enums/http-status.enum";
@@ -60,6 +60,39 @@ class AuthService {
         }
 
         return new ServiceData(HttpStatus.OK, Messages.LOGIN_SUCCESSFULLY, { name: user.username, token: accessToken })
+    }
+
+    async renewToken(req: Request, res: Response) {
+        console.log(req.cookies?.jwt)
+        if (!req.cookies?.jwt) {
+            return res.sendStatus(HttpStatus.UNAUTHORIZED);
+        }
+
+        const refreshToken = req.cookies.jwt;
+
+        const user = await this.userRepository.getUserByRefreshToken(refreshToken);
+        console.log(user);
+        if (user === null) {
+            return res.sendStatus(HttpStatus.FORBIDDEN);
+        }
+
+        if (user.canLogin == false) {
+            return res.sendStatus(HttpStatus.UNAUTHORIZED);
+        }
+
+        const jwt = new Jwt();
+
+        jwt.verify(
+            refreshToken,
+            process.env.REFRESHTOKEN_SECRET!,
+            (err, decoded) => {
+                if (err || user._id as string != decoded._id) {
+                    return res.sendStatus(HttpStatus.FORBIDDEN);
+                }
+                const newToken = jwt.generateAccessToken(decoded._id, decoded.userName);
+                return res.json({ accessToken: newToken });
+            }
+        )
     }
 }
 

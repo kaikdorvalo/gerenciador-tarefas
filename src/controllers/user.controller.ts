@@ -4,7 +4,6 @@ import userService from '../services/user.service'
 
 class UserController {
     async create(req: Request, res: Response) {
-        console.log("chegou")
         const result = await userService.create(req.body);
         return res.status(result.statusCode).send(result.metaData);
     }

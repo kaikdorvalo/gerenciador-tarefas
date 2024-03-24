@@ -45,14 +45,14 @@ class UserService {
         createUser.canLogin = true;
         createUser.password = await hash.encode(createUser.password);
 
-        return await this.repository.create(createUser)
+        return this.repository.create(createUser)
             .then(() => {
                 return new ServiceData(
                     HttpStatus.OK,
                     Messages.USER_CREATED_SUCCESSFULLY,
                 )
             })
-            .catch((error) => {
+            .catch(() => {
                 return new ServiceData(
                     HttpStatus.BAD_REQUEST,
                     Errors.MISSING_USER_INFORMATIONS

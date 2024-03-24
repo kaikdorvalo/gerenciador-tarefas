@@ -8,6 +8,10 @@ export class GenericRepository<T extends Document> {
         return await this.model.create(data);
     }
 
+    async find(filter: FilterQuery<T>): Promise<T[] | null> {
+        return await this.model.find(filter);
+    }
+
     async findOne(filter: FilterQuery<T>): Promise<T | null> {
         return await this.model.findOne(filter);
     }

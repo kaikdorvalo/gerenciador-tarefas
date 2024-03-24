@@ -16,6 +16,10 @@ const Category = new Schema({
     user: {
         type: String,
         required: [true, 'user']
+    },
+    active: {
+        type: Boolean,
+        required: [true, 'active']
     }
 }, {
     timestamps: true,

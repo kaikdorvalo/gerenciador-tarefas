@@ -2,6 +2,14 @@ import express from 'express'
 import mongoose from 'mongoose'
 import { routes } from './src/routes/routes'
 import 'dotenv/config'
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+
+const corsOptions = {
+    credentials: true,
+    origin: process.env.CORS_ORIGIN!
+}
+
 
 class App {
     express: express.Application
@@ -14,7 +22,9 @@ class App {
     }
 
     private middleware(): void {
-        this.express.use(express.json())
+        this.express.use(express.json());
+        this.express.use(cors(corsOptions));
+        this.express.use(cookieParser());
     }
 
     private async database() {
