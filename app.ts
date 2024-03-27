@@ -10,6 +10,15 @@ const corsOptions = {
     origin: process.env.CORS_ORIGIN!
 }
 
+declare global {
+    namespace Express {
+        interface Request {
+            user: {
+                _id: string;
+            }
+        }
+    }
+}
 
 class App {
     express: express.Application
