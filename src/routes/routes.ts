@@ -13,8 +13,11 @@ routes.get('/users/refreshtoken', authController.renewToken);
 routes.post('/tasks', authMiddleware, taskController.create);
 routes.get('/tasks', authMiddleware, taskController.getTasks);
 routes.get('/tasks/:id', authMiddleware, taskController.getTask);
+routes.put('/tasks', authMiddleware, taskController.updateTask);
 routes.post('/categories', authMiddleware, categoryController.create);
+routes.put('/categories', authMiddleware, categoryController.updateCategory);
 routes.get('/categories', authMiddleware, categoryController.getCatgories);
+routes.delete('/categories', authMiddleware, categoryController.deleteCategory);
 routes.get('/categories/:id', authMiddleware, categoryController.getCategory);
 
 export {

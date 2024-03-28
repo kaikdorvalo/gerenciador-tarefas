@@ -17,6 +17,11 @@ class TaskController {
         const result = await taskService.getTask(id, req);
         return res.status(result.statusCode).send(result.metaData);
     }
+
+    async updateTask(req: Request, res: Response) {
+        const result = await taskService.updateTask(req.user._id, req.body);
+        return res.status(result.statusCode).send(result.metaData);
+    }
 }
 
 export default new TaskController();

@@ -4,6 +4,10 @@ export class GenericRepository<T extends Document> {
 
     constructor(private model: Model<T>) { }
 
+    async count(filter: FilterQuery<T>) {
+        return await this.model.countDocuments(filter);
+    }
+
     async create(data: Partial<T>): Promise<T> {
         return await this.model.create(data);
     }
