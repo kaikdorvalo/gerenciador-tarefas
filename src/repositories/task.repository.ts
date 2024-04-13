@@ -1,5 +1,5 @@
 import { GenericRepository } from "./generic/generic-repository.repository";
-import { Model } from "mongoose";
+import { FilterQuery, Model } from "mongoose";
 import { TaskDocument } from "../schema/task.schema";
 import { Task } from "../interfaces/task.interface";
 import { UpdateTaskDto } from "../dtos/task/update-task.dto";
@@ -8,6 +8,16 @@ import { CreateTaskDto } from "../dtos/task/create-task.dto";
 export class TaskRepository extends GenericRepository<TaskDocument> {
     constructor(private userModel: Model<TaskDocument>) {
         super(userModel);
+    }
+
+    async findAllTasks(): Promise<Task[] | null> {
+        return this.find({ active: true })
+            .then((tasks) => {
+                return tasks
+            })
+            .catch(() => {
+                return null;
+            })
     }
 
     async getTasks(userId: string): Promise<Task[] | null> {
@@ -36,6 +46,19 @@ export class TaskRepository extends GenericRepository<TaskDocument> {
                 if (result.matchedCount !== 0) {
                     return true;
                 }
+                return false;
+            })
+    }
+
+    async desactiveTask(id: string) {
+        return this.updateOne({ _id: id }, { active: false })
+            .then((result) => {
+                if (result.matchedCount !== 0) {
+                    return true;
+                }
+                return false
+            })
+            .catch(() => {
                 return false;
             })
     }

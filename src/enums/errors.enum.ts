@@ -14,6 +14,7 @@ export enum Errors {
     INVALID_TASK_DESCRIPTION = 'Invalid Task Description',
     MISSING_TASK_INFORMATIONS = "Can't Create Task: Informations Missing",
     TASK_NOT_FOUND = "Task Not Found",
+    TASKS_NOT_FOUND = "Tasks Not Found",
 
     INVALID_USER_CATEGORY = "Invalid User Category",
     CATEGORY_NAME_ALREADY_EXISTS = "This Category Name Already Exists",
@@ -23,6 +24,7 @@ export enum Errors {
     CATEGORY_NOT_FOUND = "Category Not Found",
     CATEGORY_IN_USE = "Cannot delete this category because it is in use",
     CANNOT_UPDATE_CATEGORY = 'Cannot Update Category',
+    CATEGORIES_NOT_FOUND = 'Categories Not Found',
 
     INTERNAL_SERVER_ERROR = 'Internal Server Error'
 }

@@ -6,6 +6,8 @@ export interface Task {
     endDate: Date;
     type: string;
     category?: string;
+    completed: boolean;
+    completedDate?: Date;
     status: string;
     user: string;
     active: boolean;

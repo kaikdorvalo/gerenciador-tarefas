@@ -1,6 +1,7 @@
 export class FormatFields {
     public dateToString(date: Date) {
-        console.log(date.toISOString().split('T')[0])
-        return date.toISOString().split('T')[0];
+        let convert = new Date(date);
+        console.log(convert.toISOString().split('T')[0])
+        return convert.toISOString().split('T')[0];
     }
 }

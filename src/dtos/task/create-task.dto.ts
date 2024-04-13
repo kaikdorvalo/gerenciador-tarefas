@@ -5,6 +5,7 @@ export class CreateTaskDto {
     endDate: Date;
     type: string;
     category?: string;
+    completed?: boolean;
     status?: string;
     user?: string;
     active?: boolean;

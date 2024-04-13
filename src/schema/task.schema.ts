@@ -1,6 +1,7 @@
 import { Document, Schema, model } from 'mongoose'
 import { Collections } from '../enums/collections.enum'
 import { Task } from '../interfaces/task.interface';
+import { TaskStatus } from '../enums/task-status.enum';
 
 export type TaskDocument = Task & Document;
 
@@ -28,9 +29,16 @@ const Task = new Schema({
     category: {
         type: String
     },
+    completed: {
+        type: Boolean,
+        required: [true, 'completed']
+    },
+    completedDate: {
+        type: Date
+    },
     status: {
         type: String,
-        enum: ['pending', 'in-progress', 'completed'],
+        enum: [TaskStatus.PENDING, TaskStatus.IN_PROGRESS, TaskStatus.COMPLETED],
         required: [true, 'status']
     },
     user: {
