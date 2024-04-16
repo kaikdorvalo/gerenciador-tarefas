@@ -4,6 +4,8 @@ import { TaskDocument } from "../schema/task.schema";
 import { Task } from "../interfaces/task.interface";
 import { UpdateTaskDto } from "../dtos/task/update-task.dto";
 import { CreateTaskDto } from "../dtos/task/create-task.dto";
+import { ChangeTaskStatus } from "../dtos/task/complete-task.dto";
+import { TaskStatus } from "../enums/task-status.enum";
 
 export class TaskRepository extends GenericRepository<TaskDocument> {
     constructor(private userModel: Model<TaskDocument>) {
@@ -31,7 +33,7 @@ export class TaskRepository extends GenericRepository<TaskDocument> {
     }
 
     async getTaskById(userId: string, id: string): Promise<Task | null> {
-        return this.findOne({ user: userId, _id: id })
+        return this.findOne({ user: userId, _id: id, active: true })
             .then((task) => {
                 return task
             })
@@ -48,6 +50,9 @@ export class TaskRepository extends GenericRepository<TaskDocument> {
                 }
                 return false;
             })
+            .catch(() => {
+                return false;
+            })
     }
 
     async desactiveTask(id: string) {
@@ -61,5 +66,32 @@ export class TaskRepository extends GenericRepository<TaskDocument> {
             .catch(() => {
                 return false;
             })
+    }
+
+    async setTaskStatus(changeTaskStatus: ChangeTaskStatus) {
+        if (changeTaskStatus.status == TaskStatus.COMPLETED) {
+            changeTaskStatus.completedDate = new Date();
+            return this.updateOne({ _id: changeTaskStatus._id }, { status: changeTaskStatus.status, completedDate: changeTaskStatus.completedDate })
+                .then((res) => {
+                    if (res.matchedCount >= 1) {
+                        return { action: changeTaskStatus.status, result: true };
+                    }
+                    return { action: changeTaskStatus.status, result: false }
+                })
+                .catch(() => {
+                    return { action: changeTaskStatus.status, result: false }
+                })
+        } else {
+            return this.updateOne({ _id: changeTaskStatus._id }, { status: changeTaskStatus.status, completedDate: null })
+                .then((res) => {
+                    if (res.matchedCount >= 1) {
+                        return { action: changeTaskStatus.status, result: true };
+                    }
+                    return { action: changeTaskStatus.status, result: false }
+                })
+                .catch(() => {
+                    return { action: changeTaskStatus.status, result: false }
+                })
+        }
     }
 }

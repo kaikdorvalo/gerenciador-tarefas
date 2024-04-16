@@ -76,6 +76,11 @@ class TaskController {
         const result = await taskService.getUserOldestTask(req.user._id);
         return res.status(result.statusCode).send(result.metaData);
     }
+
+    async completeTask(req: Request, res: Response) {
+        const result = await taskService.completeTask(req.user._id, req.body);
+        return res.status(result.statusCode).send(result.metaData);
+    }
 }
 
 export default new TaskController();

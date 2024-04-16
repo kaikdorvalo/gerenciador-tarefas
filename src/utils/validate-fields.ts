@@ -14,22 +14,26 @@ export class ValidateFields {
         return true;
     }
 
-    public validateDate(date: string): boolean {
-        const regex = /^\d{4}-\d{2}-\d{2}$/;
-        if (!regex.test(date)) {
-            return false;
-        }
+    public validateDate(date: Date): boolean {
+        // const regex = /^\d{4}-\d{2}-\d{2}$/;
+        // if (!regex.test(date)) {
+        //     return false;
+        // }
 
-        const partesData = date.split('-');
-        const ano = parseInt(partesData[0], 10);
-        const mes = parseInt(partesData[1], 10) - 1;
-        const dia = parseInt(partesData[2], 10);
+        // const partesData = date.split('-');
+        // const ano = parseInt(partesData[0], 10);
+        // const mes = parseInt(partesData[1], 10) - 1;
+        // const dia = parseInt(partesData[2], 10);
 
-        const dateObject = new Date(ano, mes, dia);
+        // const dateObject = new Date(ano, mes, dia);
 
-        return dateObject.getFullYear() === ano &&
-            dateObject.getMonth() === mes &&
-            dateObject.getDate() === dia;
+        // console.log(dateObject)
+
+        // return dateObject.getFullYear() === ano &&
+        //     dateObject.getMonth() === mes &&
+        //     dateObject.getDate() === dia;
+
+        return isDate(date.toISOString());
     }
 
     public validateUrl(url: string): boolean {

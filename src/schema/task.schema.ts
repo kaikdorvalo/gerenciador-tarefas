@@ -29,10 +29,6 @@ const Task = new Schema({
     category: {
         type: String
     },
-    completed: {
-        type: Boolean,
-        required: [true, 'completed']
-    },
     completedDate: {
         type: Date
     },

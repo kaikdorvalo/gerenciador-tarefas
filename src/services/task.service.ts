@@ -15,6 +15,8 @@ import { DeleteTaskDto } from '../dtos/task/delete-task.dto';
 import { Task } from '../interfaces/task.interface';
 import { TaskPeriodAndStatusDto } from '../dtos/task/task-period';
 import { CategoryGroupTask } from '../classes/CategoryGroupTask';
+import { ChangeTaskStatus } from '../dtos/task/complete-task.dto';
+import { TaskStatus } from '../enums/task-status.enum';
 
 class TaskService {
     private readonly repository = new TaskRepository(taskModel);
@@ -22,18 +24,16 @@ class TaskService {
     private validateFields = new ValidateFields();
     private formatFields = new FormatFields();
 
-    private validateStartAndEndDate(startDate: string, endDate: string) {
-        if (this.validateFields.validateDate(startDate) && this.validateFields.validateDate(endDate)) {
-            if (startDate < endDate) {
-                return true;
-            }
+    private validateStartAndEndDate(startDate: Date, endDate: Date) {
+        if (startDate < endDate) {
+            return true;
         }
         return false;
     }
 
     async create(createTask: CreateTaskDto, req: Request) {
 
-        if (this.validateStartAndEndDate(this.formatFields.dateToString(createTask.startDate), this.formatFields.dateToString(createTask.endDate))) {
+        if (!this.validateStartAndEndDate(createTask.startDate, createTask.endDate)) {
             return new ServiceData(HttpStatus.BAD_REQUEST, Errors.START_DATE_AND_END_DATE);
         }
 
@@ -158,7 +158,7 @@ class TaskService {
                 }
 
                 if (updateTask.startDate && updateTask.endDate === undefined) {
-                    if (!this.validateStartAndEndDate(updateTask.startDate, this.formatFields.dateToString(task.endDate))) {
+                    if (!this.validateStartAndEndDate(updateTask.startDate, task.endDate)) {
                         return new ServiceData(
                             HttpStatus.BAD_REQUEST,
                             Errors.START_DATE_AND_END_DATE
@@ -167,7 +167,7 @@ class TaskService {
                 }
 
                 if (updateTask.startDate === undefined && updateTask.endDate) {
-                    if (!this.validateStartAndEndDate(this.formatFields.dateToString(task.startDate), updateTask.endDate)) {
+                    if (!this.validateStartAndEndDate(task.startDate, updateTask.endDate)) {
                         return new ServiceData(
                             HttpStatus.BAD_REQUEST,
                             Errors.START_DATE_AND_END_DATE
@@ -422,11 +422,11 @@ class TaskService {
             if (categories) {
                 if (tasks) {
                     categories.forEach((category) => {
-                        let tasksArray = tasks.map((task) => {
-                            if (task.category === category._id) {
+                        let tasksArray: Task[];
+                        tasksArray = tasks.filter((task) => {
+                            if (task.category == category._id) {
                                 return task;
                             }
-                            return null
                         });
                         const categoryGroupTask = new CategoryGroupTask(category, tasksArray);
                         group.push(categoryGroupTask);
@@ -478,6 +478,32 @@ class TaskService {
         return new ServiceData(
             HttpStatus.NOT_FOUND,
             Errors.TASK_NOT_FOUND
+        )
+    }
+
+
+    // Não funciona
+    async completeTask(userId: string, changeTaskStatus: ChangeTaskStatus) {
+        const task = await this.repository.getTaskById(userId, changeTaskStatus._id);
+        console.log(task)
+
+        if (task && task.user == userId) {
+            return this.repository.setTaskStatus(changeTaskStatus)
+                .then((res) => {
+                    return new ServiceData(
+                        HttpStatus.OK,
+                        res.action == TaskStatus.COMPLETED ? Messages.TASK_COMPLETED_SUCCESSFULLY : Messages.TASK_STATUS_UPDATED_SUCCESSFULLY
+                    )
+                })
+                .catch(() => {
+                    return new ServiceData(
+                        HttpStatus.INTERNAL_SERVER_ERROR
+                    )
+                })
+        }
+
+        return new ServiceData(
+            HttpStatus.NOT_FOUND
         )
     }
 }

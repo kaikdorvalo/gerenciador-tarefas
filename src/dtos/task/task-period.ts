@@ -1,5 +1,5 @@
 export class TaskPeriodAndStatusDto {
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     status?: string;
 }

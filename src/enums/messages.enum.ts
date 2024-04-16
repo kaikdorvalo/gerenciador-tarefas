@@ -15,6 +15,8 @@ export enum Messages {
     TASK_WITH_HIGHEST_DESCRIPTION = 'Task With Highest Description',
     TASKS_GROUPED_BY_CATEGORY = 'Tasks Grouped By Category',
     USER_OLDEST_TASK = 'User Oldest Task',
+    TASK_COMPLETED_SUCCESSFULLY = 'Task Completed Successfully',
+    TASK_STATUS_UPDATED_SUCCESSFULLY = 'Task Status Updated Successfully',
 
     CATEGORY_CREATED_SUCCESSFULLY = 'Category Created Successfully',
     CATEGORY_FOUND = "Category Found",

@@ -3,9 +3,9 @@ import { Task } from "../interfaces/task.interface";
 
 export class CategoryGroupTask {
     public category: Category;
-    public tasks: (Task | null)[];
+    public tasks: Task[];
 
-    constructor(category: Category, tasks: (Task | null)[]) {
+    constructor(category: Category, tasks: Task[]) {
         this.category = category;
         this.tasks = tasks;
     }
