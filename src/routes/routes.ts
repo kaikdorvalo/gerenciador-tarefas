@@ -28,6 +28,7 @@ routes.get('/categories/:id', authMiddleware, categoryController.getCategory);
 routes.get('/tasks/endavarage', authMiddleware, taskController.getUserTaskCompletionAvarage);
 routes.get('/tasks/highestdescription', authMiddleware, taskController.getTaskWithHighestDescription);
 routes.get('/tasks/groupwithcategory', authMiddleware, taskController.getTasksAndGroupByCategory);
+routes.get('/tasks/oldest', authMiddleware, taskController.getUserOldestTask);
 
 export {
     routes

@@ -14,6 +14,7 @@ export enum Messages {
     USER_TASKS_COMPLETION_AVARAGE = 'User Tasks Completion Avarage',
     TASK_WITH_HIGHEST_DESCRIPTION = 'Task With Highest Description',
     TASKS_GROUPED_BY_CATEGORY = 'Tasks Grouped By Category',
+    USER_OLDEST_TASK = 'User Oldest Task',
 
     CATEGORY_CREATED_SUCCESSFULLY = 'Category Created Successfully',
     CATEGORY_FOUND = "Category Found",

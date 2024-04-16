@@ -456,6 +456,30 @@ class TaskService {
             )
         }
     }
+
+    async getUserOldestTask(userId: string) {
+        const tasks = await this.repository.getTasks(userId);
+
+        if (tasks) {
+            let oldest = tasks[0];
+            for (let i = 0; i < tasks.length; i++) {
+                if (tasks[i].createdAt! < oldest.createdAt!) {
+                    oldest = tasks[i];
+                }
+            }
+
+            return new ServiceData(
+                HttpStatus.OK,
+                Messages.USER_OLDEST_TASK,
+                oldest
+            )
+        }
+
+        return new ServiceData(
+            HttpStatus.NOT_FOUND,
+            Errors.TASK_NOT_FOUND
+        )
+    }
 }
 
 
