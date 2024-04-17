@@ -60,10 +60,11 @@ class TaskService {
         createTask.completed = false;
 
         return this.repository.create(createTask)
-            .then(() => {
+            .then((res) => {
                 return new ServiceData(
                     HttpStatus.OK,
-                    Messages.TASK_CREATED_SUCCESSFULLY
+                    Messages.TASK_CREATED_SUCCESSFULLY,
+                    res
                 )
             })
             .catch(() => {
@@ -485,7 +486,6 @@ class TaskService {
     // Não funciona
     async completeTask(userId: string, changeTaskStatus: ChangeTaskStatus) {
         const task = await this.repository.getTaskById(userId, changeTaskStatus._id);
-        console.log(task)
 
         if (task && task.user == userId) {
             return this.repository.setTaskStatus(changeTaskStatus)

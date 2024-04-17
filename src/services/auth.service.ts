@@ -63,7 +63,6 @@ class AuthService {
     }
 
     async renewToken(req: Request, res: Response) {
-        console.log(req.cookies?.jwt)
         if (!req.cookies?.jwt) {
             return res.sendStatus(HttpStatus.UNAUTHORIZED);
         }
@@ -71,7 +70,6 @@ class AuthService {
         const refreshToken = req.cookies.jwt;
 
         const user = await this.userRepository.getUserByRefreshToken(refreshToken);
-        console.log(user);
         if (user === null) {
             return res.sendStatus(HttpStatus.FORBIDDEN);
         }

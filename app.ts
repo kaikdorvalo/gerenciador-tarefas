@@ -27,13 +27,12 @@ class App {
     }
 
     private async database() {
-        mongoose.connect(process.env.MONGODB_CONNECT!)
-            .then(() => {
-                console.log("connect database success");
-            })
-            .catch((error) => {
-                console.error('Cannot connect to database, error:', error);
-            })
+        try {
+            await mongoose.connect(process.env.MONGODB_CONNECT!)
+            // console.log("connect database success");
+        } catch (error) {
+            console.error('Cannot connect to database, error:', error);
+        }
     }
 
     private routes(): void {

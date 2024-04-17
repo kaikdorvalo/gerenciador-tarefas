@@ -52,7 +52,6 @@ class TaskController {
     }
 
     async getUserLastTask(req: Request, res: Response) {
-        console.log('entrou controller')
         const result = await taskService.getUserLastTask(req.user._id);
         return res.status(result.statusCode).send(result.metaData);
     }
