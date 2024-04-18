@@ -46,22 +46,19 @@ export class TaskRepository extends GenericRepository<TaskDocument> {
         return this.updateOne({ _id: updateTask._id }, updateTask)
             .then((result) => {
                 if (result.matchedCount !== 0) {
-                    return true;
+                    return updateTask._id;
                 }
-                return false;
+                return null;
             })
             .catch(() => {
-                return false;
+                return null;
             })
     }
 
     async desactiveTask(id: string) {
         return this.updateOne({ _id: id }, { active: false })
             .then((result) => {
-                if (result.matchedCount !== 0) {
-                    return true;
-                }
-                return false
+                return true;
             })
             .catch(() => {
                 return false;

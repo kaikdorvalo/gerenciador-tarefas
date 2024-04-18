@@ -29,7 +29,7 @@ class App {
     private async database() {
         try {
             await mongoose.connect(process.env.MONGODB_CONNECT!)
-            // console.log("connect database success");
+            console.log("connect database success");
         } catch (error) {
             console.error('Cannot connect to database, error:', error);
         }

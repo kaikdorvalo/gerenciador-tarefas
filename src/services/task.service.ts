@@ -177,10 +177,11 @@ class TaskService {
                 }
 
                 return await this.repository.updateTask(updateTask)
-                    .then(() => {
+                    .then((res) => {
                         return new ServiceData(
                             HttpStatus.OK,
-                            Messages.TASK_UPDATED
+                            Messages.TASK_UPDATED,
+                            res
                         )
                     })
                     .catch(() => {
@@ -202,7 +203,7 @@ class TaskService {
     async deleteTask(userId: string, deleteTask: DeleteTaskDto) {
         const task = await this.repository.getTaskById(userId, deleteTask._id);
         if (task) {
-            this.repository.desactiveTask(task._id)
+            return this.repository.desactiveTask(task._id)
                 .then((result) => {
                     if (result) {
                         return new ServiceData(
@@ -222,6 +223,7 @@ class TaskService {
                     )
                 })
         }
+
         return new ServiceData(
             HttpStatus.NOT_FOUND,
             Errors.CATEGORY_NOT_FOUND

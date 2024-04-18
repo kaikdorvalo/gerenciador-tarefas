@@ -34,10 +34,11 @@ class CategoryService {
         createCategory.active = true;
 
         return this.repository.create(createCategory)
-            .then(() => {
+            .then((res) => {
                 return new ServiceData(
                     HttpStatus.OK,
-                    Messages.CATEGORY_CREATED_SUCCESSFULLY
+                    Messages.CATEGORY_CREATED_SUCCESSFULLY,
+                    res
                 )
             })
             .catch(() => {

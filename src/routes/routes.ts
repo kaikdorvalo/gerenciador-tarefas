@@ -16,7 +16,7 @@ routes.get('/tasks/getbyid/:id', authMiddleware, taskController.getTask);
 routes.put('/tasks', authMiddleware, taskController.updateTask);
 routes.delete('/tasks', authMiddleware, taskController.deleteTask);
 routes.get('/tasks/categories/:id', authMiddleware, taskController.getTasksByCategory);
-routes.get('/tasks/status/:status', authMiddleware, taskController.getTasksByStatus);
+routes.get('/tasks/status/:status', authMiddleware, taskController.getTasksByStatus); // testado até aqui
 routes.post('/task/period', authMiddleware, taskController.getTasksPerPeriodAndStatus);
 routes.get('/tasks/all', authMiddleware, taskController.getUserTaskAmount);
 routes.get('/tasks/last', authMiddleware, taskController.getUserLastTask);
