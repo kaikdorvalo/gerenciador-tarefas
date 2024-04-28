@@ -484,8 +484,6 @@ class TaskService {
         )
     }
 
-
-    // Não funciona
     async completeTask(userId: string, changeTaskStatus: ChangeTaskStatus) {
         const task = await this.repository.getTaskById(userId, changeTaskStatus._id);
 
