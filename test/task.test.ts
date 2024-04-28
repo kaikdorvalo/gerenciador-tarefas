@@ -31,7 +31,6 @@ describe('Task test', () => {
         expect(result.statusCode).toEqual(HttpStatus.OK);
     })
 
-    //doing
     it('Should be create a new Task with category', async () => {
         const newTaskWithCategory = { ...newTask };
         const createCategory = new CreateCategoryDto(`Test Category ${uuidv4()}`, '#ffffff');
@@ -133,6 +132,39 @@ describe('Task test', () => {
         expect(result.body.data[1].status).toEqual('in-progress');
     })
 
+    it('Should be get tasks by period', async () => {
+        const newTask1 = { ...newTask };
+        const newTask2 = { ...newTask };
+        newTask2.endDate = new Date('2021-05-04');
+        const newTask3 = { ...newTask };
+        newTask3.endDate = new Date('2022-05-04');
+
+        await Promise.all([
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask1),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask2),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask3)
+        ]);
+
+        const result = await request.post(`/task/period`).set('Authorization', `Bearer ${token}`).send({ startDate: '2021-04-04', endDate: '2022-06-04' });
+
+        expect(result.statusCode).toBe(HttpStatus.OK);
+        expect(result.body.data[0].endDate).toEqual(newTask2.endDate.toISOString())
+        expect(result.body.data[1].endDate).toEqual(newTask3.endDate.toISOString())
+    })
+
+    it('Should get user tasks amount', async () => {
+        await Promise.all([
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask),
+        ]);
+
+        const result = await request.get('/tasks/all').set('Authorization', `Bearer ${token}`);
+
+        expect(result.statusCode).toBe(HttpStatus.OK);
+        expect(result.body.data).toBeGreaterThan(0);
+
+    })
 
 
 
