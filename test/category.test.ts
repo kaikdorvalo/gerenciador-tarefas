@@ -73,5 +73,18 @@ describe('Task test', () => {
         expect(findDel.statusCode).toBe(HttpStatus.BAD_REQUEST);
     })
 
+    it('Should be get category by id', async () => {
+        const uuid = uuidv4().replace(/-/g, '')
+        let category = { ...newCategory };
+        category.name = `${uuid}test`;
+
+        const result = await request.post('/categories').set('Authorization', `Bearer ${token}`).send(category);
+        const find = await request.get(`/categories/${result.body.data._id}`).set('Authorization', `Bearer ${token}`);
+
+        expect(result.statusCode).toBe(HttpStatus.OK);
+        expect(find.body.data).toBeDefined();
+        expect(find.body.data.name).toEqual(category.name);
+    })
+
 
 })

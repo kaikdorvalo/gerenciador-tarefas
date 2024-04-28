@@ -356,11 +356,11 @@ class TaskService {
         let days = 0;
         if (tasks) {
             tasks.forEach((task) => {
-                if (task.completed) {
+                if (task.status == TaskStatus.COMPLETED) {
                     const startDate = task.startDate;
-                    const endDate = task.endDate;
-                    const diff = Math.abs(endDate.getTime() - startDate.getTime());
-                    const days = Math.ceil(diff / (1000 * 60 * 24));
+                    const endDate = task.completedDate;
+                    const diff = Math.abs(endDate!.getTime() - startDate.getTime());
+                    const days = Math.ceil(diff / (1000 * 3600 * 24));
                     tasksDays.push(days);
                 }
 

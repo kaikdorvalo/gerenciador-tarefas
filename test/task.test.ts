@@ -166,6 +166,101 @@ describe('Task test', () => {
 
     })
 
+    it('Should get task completion avarage', async () => {
+        const newTask1 = { ...newTask };
+        const newTask2 = { ...newTask };
+        const newTask3 = { ...newTask };
 
+        const [task1, task2, task3] = await Promise.all([
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask1),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask2),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask3)
+        ]);
 
+        await request.post('/tasks/complete').set('Authorization', `Bearer ${token}`).send({ _id: task1.body.data._id, status: 'completed' });
+        await request.post('/tasks/complete').set('Authorization', `Bearer ${token}`).send({ _id: task2.body.data._id, status: 'completed' });
+
+        const completion = await request.get('/tasks/endavarage').set('Authorization', `Bearer ${token}`);
+
+        expect(completion.statusCode).toBe(HttpStatus.OK);
+        expect(completion.body.data).toBeDefined();
+
+    })
+
+    it('Should get task with highest description', async () => {
+        const newTask1 = { ...newTask };
+        newTask1.description = 'fjsigj sij gijs ijgsdi jgsikl jngsdj gskj gsjjgs'
+        const newTask2 = { ...newTask };
+        newTask2.description = 'fjsig'
+        const newTask3 = { ...newTask };
+
+        const [task1, task2, task3] = await Promise.all([
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask1),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask2),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask3)
+        ]);
+
+        const result = await request.get('/tasks/highestdescription').set('Authorization', `Bearer ${token}`);
+
+        expect(result.statusCode).toBe(HttpStatus.OK);
+        expect(result.body.data._id).toEqual(task1.body.data._id);
+    })
+
+    it('Should get tasks grouped by category', async () => {
+        const category1 = new CreateCategoryDto('test1', '#ffffff')
+        const category2 = new CreateCategoryDto('test2', '#ffffff')
+        const category3 = new CreateCategoryDto('test3', '#ffffff')
+
+        const [cat1, cat2, cat3] = await Promise.all([
+            request.post('/categories').set('Authorization', `Bearer ${token}`).send(category1),
+            request.post('/categories').set('Authorization', `Bearer ${token}`).send(category2),
+            request.post('/categories').set('Authorization', `Bearer ${token}`).send(category3)
+        ]);
+
+        const newTask1 = { ...newTask };
+        newTask1.category = cat1.body.data._id;
+        const newTask2 = { ...newTask };
+        newTask2.category = cat2.body.data._id;
+        const newTask3 = { ...newTask };
+        newTask3.category = cat3.body.data._id;
+
+        await Promise.all([
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask1),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask2),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask3)
+        ]);
+
+        const result = await request.get('/tasks/groupwithcategory').set('Authorization', `Bearer ${token}`);
+
+        expect(result.statusCode).toBe(HttpStatus.OK);
+        expect(result.body.data).toBeDefined();
+    })
+
+    it('Should get oldest task', async () => {
+        const newTask1 = { ...newTask };
+        const newTask2 = { ...newTask };
+        const newTask3 = { ...newTask };
+
+        await Promise.all([
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask1),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask2),
+            request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask3)
+        ]);
+
+        const result = await request.get('/tasks/oldest').set('Authorization', `Bearer ${token}`);
+
+        expect(result.statusCode).toBe(HttpStatus.OK);
+        expect(result.body.data).toBeDefined();
+
+    })
+
+    it('Should complete task', async () => {
+        const newTask1 = { ...newTask };
+        const task1 = await request.post('/tasks').set('Authorization', `Bearer ${token}`).send(newTask1)
+        await request.post('/tasks/complete').set('Authorization', `Bearer ${token}`).send({ _id: task1.body.data._id, status: 'completed' });
+        const find = await request.get(`/tasks/getbyid/${task1.body.data._id}`).set('Authorization', `Bearer ${token}`);
+
+        expect(find.body.data._id).toEqual(task1.body.data._id);
+        expect(find.body.data.status).toEqual('completed')
+    })
 })
