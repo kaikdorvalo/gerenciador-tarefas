@@ -21,4 +21,4 @@ Para testar, basta digitar o comando "npm test"
 
 Os testes estão inserindo os dados no banco de dados, sem removê-los após o término dos testes.
 
-Informação que não podem repetir, como: email, nome de categoria, etc. estão utilizando um uuid para que não haja repetidos conforme a execução dos testes.
+Informações que não podem repetir, como: email, nome de categoria, etc. estão utilizando um uuid para que não haja repetidos conforme a execução dos testes.
