@@ -3,10 +3,8 @@ module.exports = {
     testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
     moduleFileExtensions: ['ts', 'js', 'json'],
     testEnvironment: 'node',
-    globals: {
-        'ts-jest': {
-            isolateModules: true
-        }
+    transform: {
+        '^.+\\.tsx?$': ['ts-jest', { isolateModules: true }]
     },
     clearMocks: true,
     coverageProvider: 'v8',
