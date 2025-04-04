@@ -12,25 +12,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-  services:
-    mongodb:
-      image: mongo:6.0
-      ports:
-        - 27017:27017
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '22'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Run tests
-      env:
-        MONGO_URI: "mongodb://localhost:27017/test"
-      run: npm test
+      - name: Run tests
+        env:
+          MONGO_URI: "mongodb://localhost:27017/test"
+        run: npm test
