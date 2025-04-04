@@ -1,23 +1,24 @@
-name: CI/CD Workflow
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:6.0 # Define a versão do MongoDB
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongo --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v3
       with:
         node-version: '22'
 
@@ -25,4 +26,6 @@ jobs:
       run: npm install
 
     - name: Run tests
+      env:
+        MONGODB_CONNECT: "mongodb://localhost:27017/gerenciador_tarefas"
       run: npm test
